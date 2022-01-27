@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ServiceModule } from './service/service.module';
-import { Service } from './service/service.entity';
+import { seeder } from 'nestjs-seeder';
+import { Service } from './service.entity';
+import { ServiceSeeder } from './service.seeder';
 
-@Module({
+seeder({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -15,9 +15,6 @@ import { Service } from './service/service.entity';
       entities: [Service],
       synchronize: true,
     }),
-    ServiceModule,
+    TypeOrmModule.forFeature([Service]),
   ],
-  controllers: [],
-  providers: [],
-})
-export class AppModule {}
+}).run([ServiceSeeder]);
