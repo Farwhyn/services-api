@@ -1,5 +1,16 @@
 import { Factory } from 'nestjs-seeder';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
+interface Version {
+  version: number;
+  url: string;
+}
 
 @Entity()
 export class Service {
@@ -13,4 +24,16 @@ export class Service {
   @Factory((faker) => faker.lorem.words(10))
   @Column()
   description: string;
+
+  @Factory(() => [{ version: 1, url: 'https://www.google.com' }])
+  @Column('jsonb')
+  versions: Version[];
+
+  @Factory((faker) => faker.date.recent())
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Factory((faker) => faker.date.recent())
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -1,18 +1,21 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { Request } from 'express';
+import { QueryParams } from './queryparams/queryparams';
+import { Service } from './service.entity';
 
 @Controller('api/v1/services')
 export class ServiceController {
   constructor(private serviceService: ServiceService) {}
 
-  @Get()
-  async index() {
-    return await this.serviceService.findAll();
+  @Get('search')
+  getServices(@Query() queryParams: QueryParams) {
+    console.log(queryParams);
+    return this.serviceService.findAll();
   }
 
-  @Get('search')
-  async search(@Req() req: Request) {
+  @Get()
+  async index(@Req() req: Request) {
     const builder = await this.serviceService.queryBuilder('service');
     if (req.query.find) {
       builder.where(
@@ -40,5 +43,10 @@ export class ServiceController {
       total,
       last_page: Math.ceil(total / pageSize),
     };
+  }
+
+  @Get('/:id')
+  async show(@Param('id') serviceId: string): Promise<Service> {
+    return await this.serviceService.findOne(serviceId);
   }
 }
