@@ -18,7 +18,7 @@ After that, make an API call to `GET http://localhost:3000/api/v1/services`.
 `yarn start:db` will run the script that starts the official Postgres Docker image, and it will be the main DB the server relies on. After that, running `yarn seed` will populate the database with 50 Service records. Finally, running `yarn start:dev` will run the development server. 
 
 ## API Endpoints
-```json
+```
 GET /api/v1/services
  - This is the Index endpoint and the Search endpoint. There are 4 query parameters:
     - pgnum: integer type. determines the current page of the results
