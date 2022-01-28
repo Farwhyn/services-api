@@ -1,73 +1,37 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# James NestJS Services API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend API to Get, Filter, and Paginate Services. 
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Setup
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+Ensure Docker is installed and running. Clone the repo and perform the following steps: 
 
 ```bash
-$ npm install
+yarn
+yarn start:db
+yarn seed
+yarn start:dev
+```
+After that, make an API call to `GET http://localhost:3000/api/v1/services`.
+
+## Setup Guide
+`yarn start:db` will run the script that starts the official Postgres Docker image, and it will be the main DB the server relies on. After that, running `yarn seed` will populate the database with 50 Service records. Finally, running `yarn start:dev` will run the development server. 
+
+## API Endpoints
+```json
+GET /api/v1/services
+ - This is the Index endpoint and the Search endpoint. There are 4 query parameters:
+    - pgnum: integer type. determines the current page of the results
+    - pgsize: integer type. determines the number of records in a page
+    - find: string type. represents the search string. Returns all records with name and/or description that contains this string. Uses ILIKE command.
+    - sort: type 'ASC' | 'DESC'. Orders the result by the name alphabetically. 
+  - Sample cURL: curl --location --request GET 'localhost:3000/api/v1/services?pgsize=5&find=et&sort=asc&pgnum=2'
+
+GET /api/v1/services/:id
+  - Returns a single Service, including all its attributes and versions. 
+  - Sample cURL: curl --location --request GET 'localhost:3000/api/v1/services/35'
+
 ```
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## Next Steps
+I usually start with Test Driven design. I didn't have enough time right now, but in the future, I will take advantage of NestJS's dependency injection integration, to make new Interfaces that captures the abstract behaviours of Repositories and Services. Then, I can create Jest mocks that will implement these interfaces, to create mocks that capture the behaviour. I will start with Unit tests in the Repository and service levels, creating mocks when needed. Then, I will finally create Controller e2e integration tests. 
