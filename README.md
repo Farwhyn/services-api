@@ -25,7 +25,45 @@ GET /api/v1/services
     - pgsize: integer type. determines the number of records in a page
     - find: string type. represents the search string. Returns all records with name and/or description that contains this string. Uses ILIKE command.
     - sort: type 'ASC' | 'DESC'. Orders the result by the name alphabetically. 
-  - Sample cURL: curl --location --request GET 'localhost:3000/api/v1/services?pgsize=5&find=et&sort=asc&pgnum=2'
+  - Sample cURL: curl --location --request GET 'http://localhost:3000/api/v1/services?pgsize=5&find=necessitatibus&sort=asc&pgnum=1'
+  Response:
+  {
+    "data": [
+        {
+            "id": 7,
+            "name": "necessitatibus dolorem",
+            "description": "autem et distinctio sit necessitatibus numquam consequatur vero alias cumque",
+            "versions": [
+                {
+                    "url": "https://www.google.com",
+                    "version": 1
+                }
+            ],
+            "createdAt": "2022-01-28T05:31:22.284Z",
+            "updatedAt": "2022-01-28T00:34:10.783Z"
+        },
+        {
+            "id": 9,
+            "name": "necessitatibus ut",
+            "description": "a minima doloribus velit voluptatem quia et ipsam voluptates ut",
+            "versions": [
+                {
+                    "url": "https://www.google.com",
+                    "version": 1
+                }
+            ],
+            "createdAt": "2022-01-28T03:55:23.338Z",
+            "updatedAt": "2022-01-27T18:36:49.373Z"
+        }
+    ],
+    "meta": {
+        "total": 2,
+        "prev": null,
+        "next": null,
+        "first": "/api/v1/services?pgnum=1&pgsize=5&find=necessitatibus&sort=asc",
+        "last": "/api/v1/services?pgnum=1&pgsize=5&find=necessitatibus&sort=asc"
+    }
+  }
 
 GET /api/v1/services/:id
   - Returns a single Service, including all its attributes and versions. 
