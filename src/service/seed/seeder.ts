@@ -1,6 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { seeder } from 'nestjs-seeder';
-import { Service } from './service.entity';
+import { Service } from '../service.entity';
 import { ServiceSeeder } from './service.seeder';
 
 seeder({

@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataFactory, Seeder } from 'nestjs-seeder';
 import { Repository } from 'typeorm';
-import { Service } from './service.entity';
+import { Service } from '../service.entity';
 
 export class ServiceSeeder implements Seeder {
   constructor(

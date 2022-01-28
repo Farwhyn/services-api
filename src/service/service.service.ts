@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Page } from './dto/page';
+import { PageMetadata } from './dto/page_metadata';
 import { QueryParams } from './queryparams/queryparams';
 import { Service } from './service.entity';
 
@@ -19,17 +21,14 @@ export class ServiceService {
     return service;
   }
 
-  async getAllServices(): Promise<Service[]> {
-    return this.serviceRepository.find();
-  }
-
-  async returnSearchResults(params: QueryParams) {
+  async returnSearchResults(params: QueryParams): Promise<Page<Service>> {
+    const alias = 'service';
     const { find, sort, pgnum, pgsize }: QueryParams = { ...params };
-    const queryBuilder = this.serviceRepository.createQueryBuilder('service');
+    const queryBuilder = this.serviceRepository.createQueryBuilder(alias);
 
     if (find) {
       queryBuilder.where(
-        'service.name ILIKE :find OR service.description ILIKE :find',
+        `${alias}.name ILIKE :find OR ${alias}.description ILIKE :find`,
         {
           find: `%${params.find}%`,
         },
@@ -43,14 +42,17 @@ export class ServiceService {
     queryBuilder.offset(offset).limit(pageSize);
 
     if (sort) {
-      queryBuilder.orderBy('service.name', (sort as any).toUpperCase());
+      queryBuilder.orderBy(`${alias}.name`, (sort as any).toUpperCase());
     }
     const data = await queryBuilder.getMany();
-    const total = await queryBuilder.getCount();
-    return {
-      data,
-      total,
-      last_page: Math.ceil(total / pageSize),
-    };
+    const totalCount = await queryBuilder.getCount();
+    const metaData = new PageMetadata({
+      totalCount,
+      pgnum: pageNumber,
+      pgsize: pageSize,
+      find,
+      sort,
+    });
+    return new Page<Service>(data, metaData);
   }
 }
