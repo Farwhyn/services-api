@@ -70,6 +70,11 @@ GET /api/v1/services/:id
   - Sample cURL: curl --location --request GET 'localhost:3000/api/v1/services/35'
 
 ```
-
+## Design Considerations
+- All pagination, searching, and sorting is done in the database. Searching is restrained to only *name* and *description* fields, taking advantage of Postgres's ILIKE case insensitive pattern matching to retrieve a list of services based on a search string. 
+- I wanted to follow the JSON api query parameter standard for pagination. For example, the proper pagination format in the URL would be `/services?page[number]=1&page[size]=1`. Due to my inexperience with NestJS and its validation details, I did not get a change to resolve all edge cases, and opted to go for the non-nested approach `/services?pgnum=1&pgsize=1`. 
+- Tried my best to take advantage of Dependency Injection design pattern, and Repository entity pattern. 
+- Focused on using async/await calls instead of Promise chaining, to promote code readability. 
+- The *version* field for a Service is stored as a JSON array in postgres. The reason is because it allows flexibility to add new versions for a given service. But using JSON does make it harder to work with for CRUD. 
 ## Next Steps
 I usually start with Test Driven design. I didn't have enough time right now, but in the future, I will take advantage of NestJS's dependency injection integration, to make new Interfaces that captures the abstract behaviours of Repositories and Services. Then, I can create Jest mocks that will implement these interfaces, to create mocks that capture the behaviour. I will start with Unit tests in the Repository and service levels, creating mocks when needed. Then, I will finally create Controller e2e integration tests. 
