@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Page } from './dto/page';
 import { PageMetadata } from './dto/page_metadata';
+import { SService } from './dto/service.interface';
 import { QueryParams } from './queryparams/queryparams';
 import { Service } from './service.entity';
 
 @Injectable()
-export class ServiceService {
+export class ServiceService implements SService {
   constructor(
     @InjectRepository(Service)
     private readonly serviceRepository: Repository<Service>,

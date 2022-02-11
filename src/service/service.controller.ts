@@ -1,19 +1,20 @@
 import {
   Controller,
   Get,
+  Inject,
   Param,
   Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ServiceService } from './service.service';
 import { FindOneParams, QueryParams } from './queryparams/queryparams';
 import { Service } from './service.entity';
 import { Page } from './dto/page';
+import { SERVICE_SERVICE, SService } from './dto/service.interface';
 
 @Controller('api/v1/services')
 export class ServiceController {
-  constructor(private serviceService: ServiceService) {}
+  constructor(@Inject(SERVICE_SERVICE) private serviceService: SService) {}
 
   @UsePipes(new ValidationPipe({ transform: true }))
   @Get()
